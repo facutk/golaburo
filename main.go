@@ -14,7 +14,7 @@ func main() {
 	})
 
 	http.HandleFunc("/env", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "DB_URI:", os.Getenv("DB_URI"))
+		fmt.Fprint(w, "POSTGRES_URI:", os.Getenv("POSTGRES_URI"))
 	})
 
 	http.ListenAndServe(os.Getenv("HOST")+":"+os.Getenv("PORT"), nil)
