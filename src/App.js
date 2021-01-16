@@ -5,16 +5,18 @@ import {
   Route
 } from 'react-router-dom';
 
+import Nav from './Nav';
 import Hits from './Hits';
 
 const App = () => (
   <Router>
+    <Nav />
     <Switch>
-      <Route path='/hello'>
-        <div>hello</div>
+      <Route path='/hits'>
+        <Hits />
       </Route>
       <Route path='/'>
-        <Hits />
+        <div>hello</div>
       </Route>
     </Switch>
   </Router>
