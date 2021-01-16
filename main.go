@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
