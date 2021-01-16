@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-const App = () => {
+const Hits = () => {
   const [hits, setHits] = useState();
   useEffect(() => {
-    fetch('/hits').then(r => r.text()).then(setHits);
+    fetch('/api/v1/hits').then(r => r.text()).then(setHits);
   }, []);
 
   return (
@@ -11,4 +11,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Hits;
