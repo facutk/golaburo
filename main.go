@@ -20,9 +20,7 @@ func main() {
 	}
 	defer conn.Close(context.Background())
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "Hello World!")
-	})
+	http.Handle("/", http.FileServer(http.Dir("./build")))
 
 	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "pong")
