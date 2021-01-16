@@ -5,11 +5,7 @@ const Todos = () => {
   useEffect(() => {
     fetch('/api/v1/todos')
       .then(r => r.json())
-      .then((response) => {
-        if(response) {
-          setTodos(response);
-        };
-      });
+      .then(setTodos);
   }, []);
 
   return (

@@ -41,7 +41,7 @@ func main() {
 
 		switch r.Method {
 		case http.MethodGet:
-			var todos []Todo
+			todos := []Todo{}
 
 			rows, _ := conn.Query(context.Background(), "SELECT todo.id, todo.description FROM todos todo")
 			for rows.Next() {
@@ -53,8 +53,8 @@ func main() {
 					os.Exit(1)
 				}
 			}
-			strB, _ := json.Marshal(todos)
-			fmt.Fprint(w, string(strB))
+			marshalledTodos, _ := json.Marshal(todos)
+			fmt.Fprint(w, string(marshalledTodos))
 		case http.MethodPost:
 			id := uuid.New()
 
