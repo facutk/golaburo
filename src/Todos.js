@@ -3,7 +3,13 @@ import React, { useEffect, useState } from 'react';
 const Todos = () => {
   const [todos, setTodos] = useState([]);
   useEffect(() => {
-    fetch('/api/v1/todos').then(r => r.json()).then(setTodos);
+    fetch('/api/v1/todos')
+      .then(r => r.json())
+      .then((response) => {
+        if(response) {
+          setTodos(response);
+        };
+      });
   }, []);
 
   return (
