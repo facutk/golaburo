@@ -8,8 +8,9 @@
     "react-scripts": "4.0.1"
   },
   "scripts": {
-    "start": "PORT=8080 react-scripts start",
-    "start-api": "go run main.go",
+    "start": "npx concurrently --kill-others \"npm run start-web\" \"npm run start-api\"",
+    "start-web": "PORT=8080 react-scripts start",
+    "start-api": "npx nodemon --exec go run main.go --signal SIGTERM",
     "build": "react-scripts build"
   },
   "eslintConfig": {
