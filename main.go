@@ -40,7 +40,7 @@ func main() {
 			os.Exit(1)
 		}
 
-		fmt.Fprint(w, "hits:", hits)
+		fmt.Fprint(w, hits)
 	})
 
 	http.ListenAndServe(os.Getenv("HOST")+":"+os.Getenv("PORT"), nil)
