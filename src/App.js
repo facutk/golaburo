@@ -7,6 +7,7 @@ import {
 
 import Nav from './Nav';
 import Hits from './Hits';
+import Todos from './Todos';
 
 const App = () => (
   <Router>
@@ -16,7 +17,8 @@ const App = () => (
         <Hits />
       </Route>
       <Route path='/'>
-        <div>hello</div>
+        <div>Landing</div>
+        <Todos />
       </Route>
     </Switch>
   </Router>
