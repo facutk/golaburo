@@ -24,6 +24,10 @@ func main() {
 		fmt.Fprint(w, "Hello World!")
 	})
 
+	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "pong")
+	})
+
 	http.HandleFunc("/hits", func(w http.ResponseWriter, r *http.Request) {
 		var hits int
 		err = conn.QueryRow(context.Background(), "select hits from visits where id=1").Scan(&hits)
