@@ -7,13 +7,14 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/facutk/golaburo/dummy"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/jackc/pgx/v4"
 	_ "github.com/joho/godotenv/autoload"
 )
 
-// Todo structure
+// Todo type
 type Todo struct {
 	ID          uuid.UUID
 	Description string
@@ -31,15 +32,6 @@ func main() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "pong")
-	})
-
-	r.HandleFunc("/uuid", func(w http.ResponseWriter, r *http.Request) {
-		id := uuid.New()
-		fmt.Fprint(w, id.String())
-	})
-
 	r.HandleFunc("/api/v1/todos", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
@@ -55,7 +47,7 @@ func main() {
 					os.Exit(1)
 				}
 			}
-			marshalledTodos, _ := json.Marshal(todos)
+			marshalledTodos, _ := json.MarshalIndent(todos, "", "  ")
 			w.Header().Set("Content-Type", "application/json")
 			w.Write(marshalledTodos)
 		case http.MethodPost:
@@ -74,13 +66,9 @@ func main() {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			marshalledTodo, _ := json.Marshal(t)
+			marshalledTodo, _ := json.MarshalIndent(t, "", "  ")
 			w.Header().Set("Content-Type", "application/json")
 			w.Write(marshalledTodo)
-		case http.MethodPut:
-			// Update an existing record.
-		case http.MethodDelete:
-			// Remove the record.
 		default:
 			// Give an error message.
 		}
@@ -102,8 +90,6 @@ func main() {
 			marshalledTodo, _ := json.Marshal(todo)
 			w.Header().Set("Content-Type", "application/json")
 			w.Write(marshalledTodo)
-		case http.MethodPut:
-			// Update an existing record.
 		case http.MethodDelete:
 			_, err = conn.Exec(context.Background(), "delete FROM todos where id=$1", todoID)
 			if err != nil {
@@ -113,6 +99,8 @@ func main() {
 
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
+		case http.MethodPut:
+			// Update an existing record.
 		default:
 			// Give an error message.
 		}
@@ -133,6 +121,19 @@ func main() {
 		}
 
 		fmt.Fprint(w, hits)
+	})
+
+	r.HandleFunc("/api/v1/ping", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "pong")
+	})
+
+	r.HandleFunc("/api/v1/uuid", func(w http.ResponseWriter, r *http.Request) {
+		id := uuid.New()
+		fmt.Fprint(w, id.String())
+	})
+
+	r.HandleFunc("/api/v1/dummy", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, dummy.Foo())
 	})
 
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./build")))
