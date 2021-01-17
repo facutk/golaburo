@@ -11,6 +11,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -23,12 +24,12 @@ type Todo struct {
 var conn *pgx.Conn
 
 func main() {
-	conn, err := pgx.Connect(context.Background(), os.Getenv("POSTGRESQL_URL"))
+	pool, err := pgxpool.Connect(context.Background(), os.Getenv("POSTGRESQL_URL"))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
 	}
-	defer conn.Close(context.Background())
+	defer pool.Close()
 
 	r := mux.NewRouter()
 
@@ -37,7 +38,7 @@ func main() {
 		case http.MethodGet:
 			todos := []Todo{}
 
-			rows, _ := conn.Query(context.Background(), "SELECT todo.id, todo.description FROM todos todo")
+			rows, _ := pool.Query(context.Background(), "SELECT todo.id, todo.description FROM todos todo")
 			for rows.Next() {
 				var todo = Todo{}
 				err := rows.Scan(&todo.ID, &todo.Description)
@@ -61,7 +62,7 @@ func main() {
 				return
 			}
 			t.ID = uuid.New()
-			_, err := conn.Exec(context.Background(), "INSERT INTO todos (id, description) VALUES ($1, $2);", t.ID, t.Description)
+			_, err := pool.Exec(context.Background(), "INSERT INTO todos (id, description) VALUES ($1, $2);", t.ID, t.Description)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
@@ -81,7 +82,7 @@ func main() {
 		switch r.Method {
 		case http.MethodGet:
 			todo := Todo{}
-			err = conn.QueryRow(context.Background(), "select todo.id, todo.description FROM todos todo where id=$1", todoID).Scan(&todo.ID, &todo.Description)
+			err = pool.QueryRow(context.Background(), "select todo.id, todo.description FROM todos todo where id=$1", todoID).Scan(&todo.ID, &todo.Description)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusNotFound)
 				return
@@ -91,7 +92,7 @@ func main() {
 			w.Header().Set("Content-Type", "application/json")
 			w.Write(marshalledTodo)
 		case http.MethodDelete:
-			_, err = conn.Exec(context.Background(), "delete FROM todos where id=$1", todoID)
+			_, err = pool.Exec(context.Background(), "delete FROM todos where id=$1", todoID)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusNotFound)
 				return
@@ -108,13 +109,13 @@ func main() {
 
 	r.HandleFunc("/api/v1/hits", func(w http.ResponseWriter, r *http.Request) {
 		var hits int
-		err = conn.QueryRow(context.Background(), "select hits from visits where id=1").Scan(&hits)
+		err = pool.QueryRow(context.Background(), "select hits from visits where id=1").Scan(&hits)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
 			os.Exit(1)
 		}
 
-		_, err := conn.Exec(context.Background(), "update visits set hits=$1 where id=1", hits+1)
+		_, err := pool.Exec(context.Background(), "update visits set hits=$1 where id=1", hits+1)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "update Exec failed: %v\n", err)
 			os.Exit(1)
