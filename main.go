@@ -31,8 +31,6 @@ func main() {
 
 	r := mux.NewRouter()
 
-	r.Handle("/", http.FileServer(http.Dir("./build")))
-
 	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "pong")
 	})
@@ -136,6 +134,9 @@ func main() {
 
 		fmt.Fprint(w, hits)
 	})
+
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./build")))
+
 	http.Handle("/", r)
 	http.ListenAndServe(os.Getenv("HOST")+":"+os.Getenv("PORT"), nil)
 }
