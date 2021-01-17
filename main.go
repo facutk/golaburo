@@ -8,9 +8,16 @@ import (
 	"os"
 
 	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 	"github.com/jackc/pgx/v4"
 	_ "github.com/joho/godotenv/autoload"
 )
+
+// Todo structure
+type Todo struct {
+	ID          uuid.UUID
+	Description string
+}
 
 var conn *pgx.Conn
 
@@ -22,23 +29,20 @@ func main() {
 	}
 	defer conn.Close(context.Background())
 
-	http.Handle("/", http.FileServer(http.Dir("./build")))
+	r := mux.NewRouter()
 
-	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+	r.Handle("/", http.FileServer(http.Dir("./build")))
+
+	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "pong")
 	})
 
-	http.HandleFunc("/uuid", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/uuid", func(w http.ResponseWriter, r *http.Request) {
 		id := uuid.New()
 		fmt.Fprint(w, id.String())
 	})
 
-	http.HandleFunc("/api/v1/todos", func(w http.ResponseWriter, r *http.Request) {
-		type Todo struct {
-			ID          uuid.UUID
-			Description string
-		}
-
+	r.HandleFunc("/api/v1/todos", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
 			todos := []Todo{}
@@ -84,7 +88,39 @@ func main() {
 		}
 	})
 
-	http.HandleFunc("/api/v1/hits", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/api/v1/todos/{todoId}", func(w http.ResponseWriter, r *http.Request) {
+		params := mux.Vars(r)
+		todoID := params["todoId"]
+
+		switch r.Method {
+		case http.MethodGet:
+			todo := Todo{}
+			err = conn.QueryRow(context.Background(), "select todo.id, todo.description FROM todos todo where id=$1", todoID).Scan(&todo.ID, &todo.Description)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusNotFound)
+				return
+			}
+
+			marshalledTodo, _ := json.Marshal(todo)
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(marshalledTodo)
+		case http.MethodPut:
+			// Update an existing record.
+		case http.MethodDelete:
+			_, err = conn.Exec(context.Background(), "delete FROM todos where id=$1", todoID)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusNotFound)
+				return
+			}
+
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+		default:
+			// Give an error message.
+		}
+	})
+
+	r.HandleFunc("/api/v1/hits", func(w http.ResponseWriter, r *http.Request) {
 		var hits int
 		err = conn.QueryRow(context.Background(), "select hits from visits where id=1").Scan(&hits)
 		if err != nil {
@@ -100,6 +136,6 @@ func main() {
 
 		fmt.Fprint(w, hits)
 	})
-
+	http.Handle("/", r)
 	http.ListenAndServe(os.Getenv("HOST")+":"+os.Getenv("PORT"), nil)
 }

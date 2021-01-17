@@ -30,6 +30,16 @@ const Todos = () => {
     setDraft('');
   }
 
+  const handleDelete = (todoItem) => {
+    fetch(`/api/v1/todos/${todoItem.ID}`, {
+      method: 'DELETE',
+    })
+      .then(() => {
+        const newTodos = todos.filter((todo) => todo.ID !== todoItem.ID);
+        setTodos(newTodos);
+      })
+  }
+
   return (
     <>
       <h2>Todos</h2>
@@ -42,7 +52,7 @@ const Todos = () => {
       <ul>
         {todos.map((todo) => (
           <li key={todo.ID}>
-            {todo.Description}
+            {todo.Description} <button onClick={() => handleDelete(todo)}>-</button>
           </li>
         ))}
       </ul>
