@@ -54,17 +54,27 @@ func main() {
 				}
 			}
 			marshalledTodos, _ := json.Marshal(todos)
-			fmt.Fprint(w, string(marshalledTodos))
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(marshalledTodos)
 		case http.MethodPost:
-			id := uuid.New()
+			t := Todo{}
 
-			_, err := conn.Exec(context.Background(), "INSERT INTO todos (id, description) VALUES ($1, $2);", id, "hello todos!")
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "insert failed: %v\n", err)
-				os.Exit(1)
+			// Try to decode the request body into the struct. If there is an error,
+			// respond to the client with the error message and a 400 status code.
+			errDecode := json.NewDecoder(r.Body).Decode(&t)
+			if errDecode != nil {
+				http.Error(w, errDecode.Error(), http.StatusBadRequest)
+				return
 			}
-
-			fmt.Fprint(w, id.String())
+			t.ID = uuid.New()
+			_, err := conn.Exec(context.Background(), "INSERT INTO todos (id, description) VALUES ($1, $2);", t.ID, t.Description)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			marshalledTodo, _ := json.Marshal(t)
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(marshalledTodo)
 		case http.MethodPut:
 			// Update an existing record.
 		case http.MethodDelete:
