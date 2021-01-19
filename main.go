@@ -9,7 +9,6 @@ import (
 	"github.com/facutk/golaburo/api"
 	"github.com/facutk/golaburo/api/todos"
 	"github.com/facutk/golaburo/db"
-	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/jackc/pgx/v4/pgxpool"
 	_ "github.com/joho/godotenv/autoload"
@@ -33,20 +32,9 @@ func main() {
 	r.HandleFunc("/api/v1/todos/{todoId}", todos.HandleUpdate).Methods("PUT")
 
 	r.HandleFunc("/api/v1/hits", api.HandleHits)
-
-	r.HandleFunc("/api/v1/ping", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "pong")
-	})
-
-	r.HandleFunc("/api/v1/uuid", func(w http.ResponseWriter, r *http.Request) {
-		id := uuid.New()
-		fmt.Fprint(w, id.String())
-	})
-
-	r.HandleFunc("/api/v1/dummy", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, api.Foo())
-	})
-
+	r.HandleFunc("/api/v1/ping", api.HandlePing)
+	r.HandleFunc("/api/v1/uuid", api.HandleUUID)
+	r.HandleFunc("/api/v1/dummy", api.HandleDummy)
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./build")))
 
 	http.Handle("/", r)
