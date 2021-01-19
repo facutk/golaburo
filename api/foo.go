@@ -1,4 +1,4 @@
-package dummy
+package api
 
 // Foo returns 1
 func Foo() int {

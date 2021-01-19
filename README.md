@@ -16,3 +16,10 @@ https://github.com/golang-migrate/migrate/blob/master/database/postgres/TUTORIAL
 migrate -database ${POSTGRESQL_URL} -path db/migrations up
 # migrate -database ${POSTGRESQL_URL} -path db/migrations down
 ```
+
+### Database access
+
+For now it's defined as global
+
+https://techinscribed.com/different-approaches-to-pass-database-connection-into-controllers-in-golang/
+https://www.alexedwards.net/blog/organising-database-access
