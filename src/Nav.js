@@ -9,6 +9,9 @@ const Nav = () => (
     <li>
       <Link to='/hits'>Hits</Link>
     </li>
+    <li>
+      <Link to='/dnd'>Dnd</Link>
+    </li>
   </ul>
 );
 

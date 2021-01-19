@@ -52,7 +52,7 @@ const Todos = () => {
       <ul>
         {todos.map((todo) => (
           <li key={todo.ID}>
-            {todo.Description} <button onClick={() => handleDelete(todo)}>-</button>
+            <button onClick={() => handleDelete(todo)}>-</button> {todo.Description}
           </li>
         ))}
       </ul>
