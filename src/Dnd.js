@@ -1,13 +1,6 @@
 import React, { Component } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-// fake data generator
-const getItems = count =>
-  Array.from({ length: count }, (v, k) => k).map(k => ({
-    id: `item-${k}`,
-    content: `item ${k}`
-  }));
-
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -42,7 +35,7 @@ class Dnd extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: getItems(10)
+      items: []
     };
     this.onDragEnd = this.onDragEnd.bind(this);
   }
