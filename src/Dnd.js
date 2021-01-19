@@ -47,6 +47,20 @@ class Dnd extends Component {
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
+  componentDidMount() {
+    fetch('/api/v1/todos')
+      .then(r => r.json())
+      .then((response) => {
+        const todos = response.map(item => ({
+          id: item.ID,
+          content: item.Description
+        }));
+        this.setState({
+          items: todos
+        });
+      });
+  }
+
   onDragEnd(result) {
     // dropped outside the list
     if (!result.destination) {
