@@ -46,7 +46,8 @@ class Dnd extends Component {
       .then((response) => {
         const todos = response.map(item => ({
           id: item.ID,
-          content: item.Description
+          content: item.Description,
+          ...item
         }));
         this.setState({
           items: todos
@@ -83,23 +84,31 @@ class Dnd extends Component {
               ref={provided.innerRef}
               style={getListStyle(snapshot.isDraggingOver)}
             >
-              {this.state.items.map((item, index) => (
-                <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={getItemStyle(
-                        snapshot.isDragging,
-                        provided.draggableProps.style
-                      )}
-                    >
-                      {item.content}
-                    </div>
-                  )}
-                </Draggable>
-              ))}
+              <table>
+                {this.state.items.map((item, index) => (
+                  <Draggable key={item.ID} draggableId={item.ID} index={index}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={getItemStyle(
+                          snapshot.isDragging,
+                          provided.draggableProps.style
+                        )}
+                      >
+                        <strong>
+                          {item.Description}
+                        </strong>
+                        <br />
+                        <small>
+                          {item.Created}
+                        </small>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+              </table>
               {provided.placeholder}
             </div>
           )}

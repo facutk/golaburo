@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/facutk/golaburo/db"
 	"github.com/google/uuid"
@@ -15,16 +16,23 @@ import (
 type todo struct {
 	ID          uuid.UUID
 	Description string
+	Created     time.Time
 }
 
 // HandleGetAll middleware
 func HandleGetAll(w http.ResponseWriter, r *http.Request) {
 	todos := []todo{}
 
-	rows, _ := db.Pool.Query(context.Background(), "SELECT todo.id, todo.description FROM todos todo")
+	rows, err := db.Pool.Query(context.Background(),
+		"SELECT todo.id, todo.description, todo.created FROM todos todo ORDER BY todo.created DESC")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
+		os.Exit(1)
+	}
+
 	for rows.Next() {
 		var todo = todo{}
-		err := rows.Scan(&todo.ID, &todo.Description)
+		err := rows.Scan(&todo.ID, &todo.Description, &todo.Created)
 		todos = append(todos, todo)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
