@@ -21,7 +21,7 @@ type todo struct {
 func HandleGetAll(w http.ResponseWriter, r *http.Request) {
 	todos := []todo{}
 
-	rows, _ := db.Pool.Query(context.Background(), "SELECT todo.id, todo.description FROM todos todo")
+	rows, _ := db.Pool.Query(context.Background(), "SELECT todo.id, todo.description FROM todos todo LIMIT 10")
 	for rows.Next() {
 		var todo = todo{}
 		err := rows.Scan(&todo.ID, &todo.Description)
@@ -31,8 +31,18 @@ func HandleGetAll(w http.ResponseWriter, r *http.Request) {
 			os.Exit(1)
 		}
 	}
+
+	// var count int
+	// err := db.Pool.QueryRow(context.Background(), "select count(*) FROM todos").Scan(&count)
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusNotFound)
+	// 	return
+	// }
+	// strconv.Itoa(count)
+
 	marshalledTodos, _ := json.MarshalIndent(todos, "", "  ")
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Link", r.URL.RequestURI()+";rel=self")
 	w.Write(marshalledTodos)
 }
 

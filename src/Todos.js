@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import request from './api/request';
 
 const Todos = () => {
   const [todos, setTodos] = useState([]);
   const [draft, setDraft] = useState('');
 
   useEffect(() => {
-    fetch('/api/v1/todos')
-      .then(r => r.json())
-      .then(setTodos);
+  //   fetch('/api/v1/todos')
+  //     .then(r => {
+  //       console.log(r.headers.get('Link'));
+  //       return r.json();
+  //     })
+  //     .then(setTodos);
+    request('/api/v1/todos').then(({ pagination, items }) => {
+      console.log(pagination);
+      setTodos(items);
+    })
   }, []);
 
   const handleDraftChange = (e) => {
