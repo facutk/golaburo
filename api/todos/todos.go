@@ -31,6 +31,7 @@ func HandleGetAll(w http.ResponseWriter, r *http.Request) {
 			os.Exit(1)
 		}
 	}
+	defer rows.Close()
 	marshalledTodos, _ := json.MarshalIndent(todos, "", "  ")
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(marshalledTodos)
