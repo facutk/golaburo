@@ -16,6 +16,7 @@ import (
 type todo struct {
 	ID          uuid.UUID
 	Description string
+	Rank        string
 	Created     time.Time
 }
 
@@ -24,7 +25,7 @@ func HandleGetAll(w http.ResponseWriter, r *http.Request) {
 	todos := []todo{}
 
 	rows, err := db.Pool.Query(context.Background(),
-		"SELECT todo.id, todo.description, todo.created FROM todos todo ORDER BY todo.created DESC")
+		"SELECT todo.id, todo.description, todo.rank, todo.created FROM todos todo ORDER BY todo.rank ASC, todo.created DESC")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
 		os.Exit(1)
@@ -32,7 +33,7 @@ func HandleGetAll(w http.ResponseWriter, r *http.Request) {
 
 	for rows.Next() {
 		var todo = todo{}
-		err := rows.Scan(&todo.ID, &todo.Description, &todo.Created)
+		err := rows.Scan(&todo.ID, &todo.Description, &todo.Rank, &todo.Created)
 		todos = append(todos, todo)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
