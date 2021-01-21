@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
+import Lexorank from './util/lexorank';
+
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -67,8 +69,38 @@ class Dnd extends Component {
       result.destination.index
     );
 
+    const { draggableId, destination } = result;
+    const { index } = destination;
+    const prevIndex = index - 1;
+
+    let prevRank = '';
+    if (prevIndex > -1 && prevIndex <= items.length) {
+      prevRank = items[prevIndex].Rank;
+    }
+
+    const nextIndex = index + 1;
+    let nextRank = '';
+    if (nextIndex <= items.length) {
+      nextRank = items[nextIndex].Rank;
+    }
+
+
+    const lexorank = new Lexorank();
+    
+    const [Rank] = lexorank.insert(prevRank, nextRank);
+
+    console.log({ index, prevIndex, nextIndex, prevRank, nextRank, Rank });
+
     this.setState({
-      items
+      items: items.map((item) => {
+        if (item.ID === draggableId) {
+          return {
+            ...item,
+            Rank
+          }
+        }
+        return item
+      })
     });
   }
 
@@ -97,10 +129,19 @@ class Dnd extends Component {
                           provided.draggableProps.style
                         )}
                       >
-                        <strong>
-                          {item.Description}
-                        </strong>
-                        <br />
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between"
+                          }}
+                        >
+                          <strong>
+                            {item.Description}
+                          </strong>
+                          <span>
+                            {index} {item.Rank} {item.Rank ? '★' : '☆'}
+                          </span>
+                        </div>
                         <small>
                           {item.Created}
                         </small>
