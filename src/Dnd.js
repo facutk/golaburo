@@ -87,20 +87,27 @@ class Dnd extends Component {
 
     const lexorank = new Lexorank();
     
-    const [Rank] = lexorank.insert(prevRank, nextRank);
+    const [Rank, ok] = lexorank.insert(prevRank, nextRank);
 
-    console.log({ index, prevIndex, nextIndex, prevRank, nextRank, Rank });
+    console.log({ ok, index, prevIndex, nextIndex, prevRank, nextRank, Rank });
+
+    fetch(`/api/v1/todos/${draggableId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ Rank })
+    })
+
+    const newItems = items.map((item) => {
+      if (item.ID === draggableId) {
+        return {
+          ...item,
+          Rank
+        }
+      }
+      return item
+    });
 
     this.setState({
-      items: items.map((item) => {
-        if (item.ID === draggableId) {
-          return {
-            ...item,
-            Rank
-          }
-        }
-        return item
-      })
+      items: newItems
     });
   }
 
@@ -139,7 +146,7 @@ class Dnd extends Component {
                             {item.Description}
                           </strong>
                           <span>
-                            {index} {item.Rank} {item.Rank ? '★' : '☆'}
+                            {item.Rank} {item.Rank ? '★' : '☆'}
                           </span>
                         </div>
                         <small>
