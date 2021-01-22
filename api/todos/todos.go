@@ -25,7 +25,7 @@ func HandleGetAll(w http.ResponseWriter, r *http.Request) {
 	todos := []todo{}
 
 	rows, err := db.Pool.Query(context.Background(),
-		"SELECT todo.id, todo.description, todo.rank, todo.created FROM todos todo ORDER BY todo.rank ASC, todo.created DESC")
+		"SELECT todo.id, todo.description, todo.rank, todo.created FROM todos todo ORDER BY NULLIF(todo.rank, '') ASC NULLS LAST, todo.created DESC")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
 		os.Exit(1)
