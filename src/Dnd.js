@@ -40,6 +40,7 @@ class Dnd extends Component {
       items: []
     };
     this.onDragEnd = this.onDragEnd.bind(this);
+    this.onDragStart = this.onDragStart.bind(this);
   }
 
   componentDidMount() {
@@ -55,6 +56,12 @@ class Dnd extends Component {
           items: todos
         });
       });
+  }
+
+  onDragStart() {
+    if (window.navigator.vibrate) {
+      window.navigator.vibrate(100);
+    }
   }
 
   onDragEnd(result) {
@@ -115,7 +122,7 @@ class Dnd extends Component {
   // But in this example everything is just done in one place for simplicity
   render() {
     return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
+      <DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
         <Droppable droppableId="droppable">
           {(provided, snapshot) => (
             <div
@@ -123,40 +130,38 @@ class Dnd extends Component {
               ref={provided.innerRef}
               style={getListStyle(snapshot.isDraggingOver)}
             >
-              <table>
-                {this.state.items.map((item, index) => (
-                  <Draggable key={item.ID} draggableId={item.ID} index={index}>
-                    {(provided, snapshot) => (
+              {this.state.items.map((item, index) => (
+                <Draggable key={item.ID} draggableId={item.ID} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={getItemStyle(
+                        snapshot.isDragging,
+                        provided.draggableProps.style
+                      )}
+                    >
                       <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={getItemStyle(
-                          snapshot.isDragging,
-                          provided.draggableProps.style
-                        )}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between"
+                        }}
                       >
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between"
-                          }}
-                        >
-                          <strong>
-                            {item.Description}
-                          </strong>
-                          <span>
-                            {item.Rank} {item.Rank ? '★' : '☆'}
-                          </span>
-                        </div>
-                        <small>
-                          {item.Created}
-                        </small>
+                        <strong>
+                          {item.Description}
+                        </strong>
+                        <span>
+                          {item.Rank} {item.Rank ? '★' : '☆'}
+                        </span>
                       </div>
-                    )}
-                  </Draggable>
-                ))}
-              </table>
+                      <small>
+                        {item.Created}
+                      </small>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
               {provided.placeholder}
             </div>
           )}
