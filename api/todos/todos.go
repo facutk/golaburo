@@ -102,7 +102,20 @@ func HandleDelete(w http.ResponseWriter, r *http.Request) {
 
 // HandleUpdate middleware
 func HandleUpdate(w http.ResponseWriter, r *http.Request) {
-	// params := mux.Vars(r)
-	// todoID := params["todoId"]
+	params := mux.Vars(r)
+	todoID := params["todoId"]
+
+	t := todo{}
+	errDecode := json.NewDecoder(r.Body).Decode(&t)
+	if errDecode != nil {
+		http.Error(w, errDecode.Error(), http.StatusBadRequest)
+		return
+	}
+
+	_, err := db.Pool.Exec(context.Background(), "update todos set rank=$1 where id=$2", t.Rank, todoID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusConflict)
+		return
+	}
 	// Update an existing record.
 }
