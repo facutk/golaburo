@@ -22,3 +22,11 @@ func HandleUUID(w http.ResponseWriter, r *http.Request) {
 func HandleDummy(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, Foo())
 }
+
+// CacheControlWrapper adds cache
+func CacheControlWrapper(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "max-age=2592000") // 30 days
+		h.ServeHTTP(w, r)
+	})
+}

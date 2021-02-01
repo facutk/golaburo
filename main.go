@@ -35,7 +35,7 @@ func main() {
 	r.HandleFunc("/api/v1/ping", api.HandlePing)
 	r.HandleFunc("/api/v1/uuid", api.HandleUUID)
 	r.HandleFunc("/api/v1/dummy", api.HandleDummy)
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./build")))
+	r.PathPrefix("/").Handler(api.CacheControlWrapper(http.FileServer(http.Dir("./build"))))
 
 	http.Handle("/", r)
 	http.ListenAndServe(os.Getenv("HOST")+":"+os.Getenv("PORT"), nil)
