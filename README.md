@@ -7,8 +7,7 @@ go run main.go
 
 ## Deployment
 ```sh
-gcloud builds submit --tag gcr.io/laburo-296800/golaburo
-gcloud run deploy golaburo --image gcr.io/laburo-296800/golaburo --platform managed
+git push dokku main
 ```
 
 ### migration guide
@@ -68,13 +67,4 @@ dokku buildpacks:add laburo https://github.com/heroku/heroku-buildpack-nodejs.gi
 ```
 docker ps
 docker exec -it e628307fa2fa bash
-```
-
-
-## google cloud run
-
-```
-gcloud builds submit --tag gcr.io/laburo-296800/golaburo
-
-gcloud run deploy --image gcr.io/laburo-296800/golaburo --platform managed
 ```
