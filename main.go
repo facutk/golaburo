@@ -16,7 +16,7 @@ import (
 
 func main() {
 	var err error
-	db.Pool, err = pgxpool.Connect(context.Background(), os.Getenv("POSTGRESQL_URL"))
+	db.Pool, err = pgxpool.Connect(context.Background(), os.Getenv("DATABASE_URL"))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)

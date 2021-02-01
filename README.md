@@ -7,6 +7,7 @@ go run main.go
 
 ## Deployment
 ```sh
+# git remote add dokku dokku@dokku.facu.tk:golaburo
 git push dokku main
 ```
 
