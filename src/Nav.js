@@ -2,17 +2,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Nav = () => (
-  <ul>
-    <li>
-      <Link to='/'>Home</Link>
-    </li>
-    <li>
+  <nav className="nav">
+    <div className="nav-left">
+      <Link to='/'>golaburo</Link>
+    </div>
+    <div className="nav-center">
+      
+    </div>
+    <div className="nav-right">
+      
       <Link to='/hits'>Hits</Link>
-    </li>
-    <li>
       <Link to='/dnd'>Dnd</Link>
-    </li>
-  </ul>
+    </div>
+  </nav>
 );
 
 export default Nav;

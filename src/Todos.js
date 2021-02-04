@@ -43,7 +43,7 @@ const Todos = () => {
   return (
     <>
       <h2>Todos</h2>
-      <form onSubmit={handleAddTodo}>
+      <form onSubmit={handleAddTodo} className="grouped">
         <input value={draft} onChange={handleDraftChange} />
         <button>
           Add

@@ -16,18 +16,21 @@ const App = () => (
   <Suspense fallback={<Dots />}>
     <Router>
       <Nav />
-      <Switch>
-        <Route path='/dnd'>
-          <Dnd />
-        </Route>
-        <Route path='/hits'>
-          <Hits />
-        </Route>
-        <Route path='/'>
-          <div>Landing</div>
-          <Todos />
-        </Route>
-      </Switch>
+      <div className="container">
+
+      
+        <Switch>
+          <Route path='/dnd'>
+            <Dnd />
+          </Route>
+          <Route path='/hits'>
+            <Hits />
+          </Route>
+          <Route path='/'>
+            <Todos />
+          </Route>
+        </Switch>
+      </div>
     </Router>
   </Suspense>
 );
