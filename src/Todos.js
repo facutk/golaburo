@@ -40,22 +40,24 @@ const Todos = () => {
       })
   }
 
+  const isDisabled = !draft;
+
   return (
     <>
       <h2>Todos</h2>
-      <form onSubmit={handleAddTodo} className="grouped">
+      <form onSubmit={handleAddTodo} className='grouped'>
         <input value={draft} onChange={handleDraftChange} />
-        <button>
+        <button disabled={isDisabled}>
           Add
         </button>
       </form>
-      <ul>
+      <div>
         {todos.map((todo) => (
-          <li key={todo.ID}>
+          <div key={todo.ID} className='my-6'>
             <button onClick={() => handleDelete(todo)}>-</button> {todo.Description}
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </>
   );
 };

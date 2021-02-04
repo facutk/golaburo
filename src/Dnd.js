@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import React, { Component } from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import Lexorank from './util/lexorank';
 
