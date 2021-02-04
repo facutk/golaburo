@@ -52,16 +52,21 @@ wget https://raw.githubusercontent.com/dokku/dokku/v0.23.0/bootstrap.sh
 sudo DOKKU_TAG=v0.23.0 bash bootstrap.sh
 
 # create dokku app
-dokku apps:create laburo
-dokku proxy:ports laburo
-dokku proxy:ports-set laburo http:80:5000
-dokku proxy:ports-set laburo http:80:43594
-dokku proxy:enable laburo
+dokku apps:create golaburo
+dokku config:set golaburo GOVERSION=go1.15.7
 
-dokku config:set laburo GOVERSION=go1.15.6
+dokku buildpacks:add golaburo https://github.com/heroku/heroku-buildpack-go.git
+dokku buildpacks:add golaburo https://github.com/heroku/heroku-buildpack-nodejs.git
 
-dokku buildpacks:add laburo https://github.com/heroku/heroku-buildpack-go.git
-dokku buildpacks:add laburo https://github.com/heroku/heroku-buildpack-nodejs.git
+sudo dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git
+dokku domains:add golaburo golaburo.dokku.facu.tk
+dokku apps:create 00-default
+sudo dokku letsencrypt golaburo
+
+sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres
+dokku postgres:create laburodb
+dokku postgres:link laburodb golaburo
+sudo dokku postgres:expose laburodb 5432
 ```
 
 ### debug container
