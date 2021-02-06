@@ -6,7 +6,6 @@
     "@craco/craco": "^6.1.0",
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "autoprefixer": "^9.8.6",
-    "chota": "^0.8.0",
     "postcss": "^7.0.35",
     "react": "^17.0.1",
     "react-beautiful-dnd": "^13.0.0",
