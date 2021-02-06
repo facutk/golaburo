@@ -26,9 +26,14 @@ func HandleDummy(w http.ResponseWriter, r *http.Request) {
 // CacheControlWrapper adds cache
 func CacheControlWrapper(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.String() != "/" {
-			w.Header().Set("Cache-Control", "max-age=2592000") // 30 days
+		var cache = "max-age=31536000" // 1 year
+
+		if r.URL.String() == "/" {
+			cache = "max-age=0"
 		}
+
+		w.Header().Set("Cache-Control", cache)
+
 		h.ServeHTTP(w, r)
 	})
 }
