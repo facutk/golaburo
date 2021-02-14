@@ -1,6 +1,6 @@
 {
   "name": "@golaburo/uikit",
-  "version": "0.1.0-rc.0",
+  "version": "0.1.0-rc.1",
   "private": false,
   "files": [
     "dist",
@@ -14,17 +14,20 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.7.1",
+    "autoprefixer": "^10.2.4",
     "babel-plugin-macros": "^2.8.0",
     "cross-env": "^7.0.3",
+    "postcss": "^8.2.6",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-scripts": "4.0.2"
+    "react-scripts": "4.0.2",
+    "tailwindcss": "^2.0.3"
   },
   "scripts": {
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "clean": "rimraf dist",
-    "build": "npm run clean && cross-env NODE_ENV=production babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,stories.js,__snapshots__"
+    "build": "npm run clean && cross-env NODE_ENV=production babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,stories.js,__snapshots__ && NODE_ENV=production npx tailwindcss-cli@latest build ./src/style.css -o ./dist/style.css"
   },
   "eslintConfig": {
     "extends": [

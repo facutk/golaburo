@@ -1,9 +1,16 @@
 import React from 'react';
 
-export default function Button({ text, onClick }) {
+const Button = ({
+  children, onClick
+}) => {
   return (
-    <button onClick={onClick}>
-      {text}
+    <button
+      onClick={onClick}
+      className='bg-yellow-600'
+    >
+      {children}
     </button>
   );
 }
+
+export default Button;
