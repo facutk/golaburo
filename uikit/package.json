@@ -1,12 +1,47 @@
 {
   "name": "@golaburo/uikit",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "publish": "npm publish --access public"
+  "version": "0.1.0-rc.0",
+  "private": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "dist/index.js",
+  "devDependencies": {
+    "@babel/cli": "^7.12.16",
+    "@babel/preset-env": "^7.12.16",
+    "@babel/preset-react": "^7.12.13",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.7.1",
+    "babel-plugin-macros": "^2.8.0",
+    "cross-env": "^7.0.3",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "4.0.2"
   },
-  "author": "",
-  "license": "ISC"
+  "scripts": {
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "clean": "rimraf dist",
+    "build": "npm run clean && cross-env NODE_ENV=production babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,stories.js,__snapshots__"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
