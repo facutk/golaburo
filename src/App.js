@@ -5,6 +5,8 @@ import {
   Route
 } from 'react-router-dom';
 
+import '@golaburo/uikit/dist/style.css';
+
 import Nav from './Nav';
 import Dots from './Dots';
 

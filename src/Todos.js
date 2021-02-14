@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { Button } from '@golaburo/uikit';
 
 import Lexorank from './util/lexorank';
-import { Button, Input } from './components';
+import { Input } from './components';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
