@@ -1,6 +1,6 @@
 {
   "name": "@golaburo/uikit",
-  "version": "0.1.0-rc.1",
+  "version": "0.1.0-rc.2",
   "private": false,
   "files": [
     "dist",
@@ -26,6 +26,7 @@
     "postcss-cli": "^7.1.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "tailwind-styled-components": "^1.0.7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3"
   },
   "scripts": {
