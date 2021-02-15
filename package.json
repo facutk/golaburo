@@ -3,24 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@craco/craco": "^6.1.0",
     "@golaburo/uikit": "^0.1.0-rc.1",
-    "@tailwindcss/postcss7-compat": "^2.0.2",
-    "autoprefixer": "^9.8.6",
-    "postcss": "^7.0.35",
     "react": "^17.0.1",
     "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
-    "styled-components": "^5.2.1",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2"
+    "styled-components": "^5.2.1"
   },
   "scripts": {
-    "start": "npx concurrently --kill-others \"npm run start-api\" \"npm run start-web\"",
-    "start-web": "PORT=8080 craco start",
-    "start-api": "npx nodemon --exec go run main.go --signal SIGTERM",
-    "build": "craco build"
+    "start": "concurrently --kill-others \"npm run start-api\" \"npm run start-web\"",
+    "start-web": "PORT=8080 react-scripts start",
+    "start-api": "nodemon --exec go run main.go --signal SIGTERM",
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": [
@@ -40,5 +35,9 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "http://localhost:5000",
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.7"
+  }
 }

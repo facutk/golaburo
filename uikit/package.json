@@ -20,15 +20,21 @@
     "autoprefixer": "^9.8.6",
     "babel-loader": "^8.2.2",
     "babel-plugin-macros": "^2.8.0",
+    "concurrently": "^5.3.0",
     "cross-env": "^7.0.3",
     "postcss": "^7.0.35",
+    "postcss-cli": "^7.1.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3"
   },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && cross-env NODE_ENV=production babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,stories.js,__snapshots__ && NODE_ENV=production npx tailwindcss-cli@latest build ./src/style.css -o ./dist/style.css",
+    "build": "npm run clean && cross-env NODE_ENV=production babel src --out-dir dist --ignore **/*.stories.js --ignore __tests__,spec.js,test.js,stories.js,__snapshots__ && NODE_ENV=production npx tailwindcss-cli@latest build ./src/style.css -o ./dist/style.css",
+    "start2": "npm run clean && cross-env NODE_ENV=production babel src --out-dir dist --ignore **/*.stories.js --ignore __tests__,spec.js,test.js,stories.js,__snapshots__ --watch && NODE_ENV=production npx tailwindcss-cli@latest build ./src/style.css -o ./dist/style.css",
+    "js:dev": "babel src --out-dir dist --ignore **/*.stories.js --watch",
+    "css:dev": "postcss ./src/style.css -o ./dist/style.css --watch",
+    "start": "npm run clean && NODE_ENV=production concurrently --kill-others \"npm run js:dev\" \"npm run css:dev\"",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "deploy-storybook": "npx surge storybook-static uikit-golaburo.facu.tk"
