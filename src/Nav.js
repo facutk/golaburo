@@ -1,16 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { NavBar } from '@golaburo/uikit';
 
 const Nav = () => (
-  <nav>
-    <div>
-      <Link to='/'>golaburo</Link>
-    </div>
-    <div>
-      <Link to='/hits'>Hits</Link>
-      <Link to='/dnd'>Dnd</Link>
-    </div>
-  </nav>
+  <NavBar>
+    <NavBar.Item NavLink={NavLink} to='/' exact>golaburo</NavBar.Item>
+    <NavBar.Item NavLink={NavLink} to='/hits'>Hits</NavBar.Item>
+    <NavBar.Item NavLink={NavLink} to='/dnd'>Dnd</NavBar.Item>
+  </NavBar>
 );
 
 export default Nav;
