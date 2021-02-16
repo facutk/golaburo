@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@golaburo/uikit": "0.1.0-rc.4",
+    "@golaburo/uikit": "0.1.0-rc.5",
     "react": "^17.0.1",
     "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^17.0.1",
