@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { Button } from '@golaburo/uikit';
+import { Button, Input } from '@golaburo/uikit';
 
 import Lexorank from './util/lexorank';
-import { Input } from './components';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -130,22 +129,18 @@ const Todos = () => {
   return (
     <>
       <h2>Todos</h2>
-      <form onSubmit={handleAddTodo} className='flex flex-wrap -mx-2 space-y-4 md:space-y-0'>
-        <div className='w-full px-2 md:w-2/3'>
-          <Input
-            value={draft}
-            onChange={handleDraftChange}
-            placeholder='Add Todo...'
-          />
-        </div>
-        <div className='w-full px-2 md:w-1/3'>        
-          <Button
-            disabled={isDisabled}
-            type='submit'
-          >
-            Add
-          </Button>
-        </div>
+      <form onSubmit={handleAddTodo}>
+        <Input
+          value={draft}
+          onChange={handleDraftChange}
+          placeholder='Add Todo...'
+        />
+        <Button
+          disabled={isDisabled}
+          type='submit'
+        >
+          Add
+        </Button>
       </form>
 
       <DragDropContext onDragEnd={onDragEnd}>
