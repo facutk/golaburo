@@ -2,19 +2,24 @@ import tw from 'tailwind-styled-components';
 import React from 'react';
 
 const NavBar = tw.div`
-  bg-red-500
+  bg-white
+  border-b
+  border-gray-100
+  px-4
+  py-2
+  mb-4
 `;
 
 const InnerItem = tw.div`
-  border-gray-400
   inline-block
   py-2
   px-4
+  rounded
 `;
 
 const Item = ({ NavLink = tw.a``, children, ...props }) => (
   <NavLink
-    activeClassName='bg-blue-500 inline-block'
+    activeClassName='inline-block bg-gray-100 rounded'
     {...props}
   >
     <InnerItem>
