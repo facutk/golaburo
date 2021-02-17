@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { Button, Input } from '@golaburo/uikit';
+import { Container, Button, Input } from '@golaburo/uikit';
 
 import Lexorank from './util/lexorank';
 
@@ -127,7 +127,7 @@ const Todos = () => {
   const isDisabled = !draft;
 
   return (
-    <>
+    <Container>
       <h2>Todos</h2>
       <form onSubmit={handleAddTodo}>
         <Input
@@ -189,7 +189,7 @@ const Todos = () => {
           )}
         </Droppable>
       </DragDropContext>
-    </>
+    </Container>
   );
 };
 

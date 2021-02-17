@@ -4,6 +4,7 @@ import {
   Switch,
   Route
 } from 'react-router-dom';
+import { ThemeWrapper } from '@golaburo/uikit';
 
 import '@golaburo/uikit/dist/style.css';
 
@@ -17,18 +18,20 @@ const Todos = React.lazy(() => import('./Todos'));
 const App = () => (
   <Suspense fallback={<Dots />}>
     <Router>
-      <Nav />
-      <Switch>
-        <Route path='/dnd'>
-          <Dnd />
-        </Route>
-        <Route path='/hits'>
-          <Hits />
-        </Route>
-        <Route path='/'>
-          <Todos />
-        </Route>
-      </Switch>
+      <ThemeWrapper>
+        <Nav />
+        <Switch>
+          <Route path='/dnd'>
+            <Dnd />
+          </Route>
+          <Route path='/hits'>
+            <Hits />
+          </Route>
+          <Route path='/'>
+            <Todos />
+          </Route>
+        </Switch>
+      </ThemeWrapper>
     </Router>
   </Suspense>
 );
